@@ -1,10 +1,9 @@
 <template>
-  <div>
-    <h1>game 2048: {{post.body}}</h1>
-  </div>
+  <div> {{ background }}</div>
 </template>
 <script>
 import api from '@/untils/api'
+import boardJS from '@/board/board'
 
 export default {
   name: 'Home',
@@ -13,6 +12,7 @@ export default {
     error: []
   },
   created () {
+    this.background()
     api.get('post')
       .then(response => {
         console.log('Ok')
@@ -20,6 +20,11 @@ export default {
       .catch(error => {
         console.log(error)
       })
+  },
+  methods: {
+    background () {
+      boardJS.init(4)
+    }
   }
 }
 </script>
