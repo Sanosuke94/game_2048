@@ -4,7 +4,8 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
+import api from '@/untils/api'
+
 export default {
   name: 'Home',
   data () {
@@ -12,13 +13,13 @@ export default {
     error: []
   },
   created () {
-    axios.get(' https://leaderboard.lp1.eu/api/json')
-    .then(response => {
-      this.post = response.data
-    })
-    .catch(error => {
-      this.error.push(error)
-    })
+    api.get('post')
+      .then(response => {
+        console.log('Ok')
+      })
+      .catch(error => {
+        console.log(error)
+      })
   }
 }
 </script>
