@@ -1,29 +1,21 @@
 <template>
-  <div> {{ background }}</div>
 </template>
 <script>
-import api from '@/untils/api'
 import boardJS from '@/board/board'
 
 export default {
   name: 'Home',
   data () {
-    post: []
-    error: []
+    this.background()
   },
   created () {
-    this.background()
-    api.get('post')
-      .then(response => {
-        console.log('Ok')
-      })
-      .catch(error => {
-        console.log(error)
-      })
   },
   methods: {
     background () {
-      boardJS.init(4)
+      boardJS.init('4')
+    },
+    moveUp () {
+      boardJS.move('up')
     }
   }
 }
