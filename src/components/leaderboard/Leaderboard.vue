@@ -27,7 +27,19 @@ export default {
       http
         .get('json')
         .then(response => {
-          this.scores = response.data
+          this.scores = response.data.filter(element => {
+            var isValid = true
+            if (element.nickname === undefined || element.nickname.length < 3 || element.nickname.length > 50) {
+              isValid &= false
+            }
+            if (element.score === undefined || isNaN(element.score) || parseInt(element.score) < 1) {
+              isValid &= false
+            }
+            if (element.time === undefined || isNaN(element.time) || parseInt(element.time) < 1) {
+              isValid &= false
+            }
+            return isValid
+          })
           this.scores.forEach((element, index) => {
             element.score = Number(element.score)
           })
