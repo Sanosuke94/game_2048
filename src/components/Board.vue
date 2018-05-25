@@ -1,7 +1,7 @@
 <template>
 <div>
     <div id="jeu">
-        <div class="plateau">
+        <div class="plateau" v-bind:style="{'width': (size * 100) + 'px', 'height': (size * 100) + 'px'}">
             <div v-for="(place, index) in places"
         :key="index" :nb="nb" :fusionnable="fusionnable" :index="index" class="place" v-bind:style="{'width': dimension + 'px', 'height': dimension + 'px'}">
                 <p class="number" v-bind:nb="place.nb">{{place.nb}}</p>
@@ -12,7 +12,7 @@
     <div id="score">
         <p>Score : <strong>{{ score }}</strong> | Mouvements : <strong>{{ mouvs }}</strong></p>
     </div>
-    Taille du plateau : <input id="number" type="number" min="2" max="6" v-bind:value="size">
+    Taille du plateau : <input id="number" type="number" v-bind:value="size">
     <button @click="reset">Recommencer</button>
 
 </div>
@@ -31,7 +31,6 @@ export default {
             BoardJS.reset(document.getElementById('number').value)
             this.size = BoardJS.size
             localStorage.setItem('size', BoardJS.size)
-            this.dimension = 500 / BoardJS.size
             this.places = BoardJS.pions
             this.score = BoardJS.score
             this.mouvs = BoardJS.mouvs
@@ -41,7 +40,7 @@ export default {
     data () {
         return {
             "size" : BoardJS.size,
-            "dimension" : 500 / BoardJS.size,
+            "dimension" : 100,
             "places" : BoardJS.pions,
             "score" : BoardJS.score,
             "mouvs" : BoardJS.mouvs
@@ -99,10 +98,9 @@ export default {
 
     .plateau
     {
-        padding: 0px;
+        padding: 5px;
         background-color: #bbada0;
-        width: 575px;
-        height: 575px;
+
     }
 
     #score {
@@ -136,6 +134,8 @@ export default {
         height: 100%;
         width: 100%;
         transform: scale(0.9);
+        margin-top: 0px;
+        margin-bottom: 0px;
         display: flex;
         justify-content: center;
         align-items: center;

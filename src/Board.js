@@ -8,6 +8,14 @@ class Board
      */
     init(size)
     {
+
+        /*
+        if (size < 2 || size > 6) {
+            alert ('!!')
+            size = 4
+        }
+        */
+        
         this.size = size
         this.pions = []
         this.score = 0
@@ -60,7 +68,7 @@ class Board
         let placesLibres = this.getPlacesLibres()
 
         if (placesLibres.length > 0) {
-
+            console.log("places libres : " + placesLibres.length)
             // choper l'index de la position correspondant à une choisie aléatoirement parmi celles qui sont libres
    
             // console.log('intervale : 0, ' + (placesLibres.length - 1))
@@ -73,7 +81,7 @@ class Board
             // console.log('nouveau pion : ' + x + ':' + y)        
             
         } else {
-            // console.log('FIN')
+            alert('fin')
 
         }
     }
@@ -217,8 +225,6 @@ class Board
 
     deplacer(sens) {
 
-        this.mouvs++
-
         if (sens == 'h')
         {
 
@@ -284,6 +290,7 @@ class Board
             });
 
             if (deplacement == true) {
+                this.mouvs++
                 this.ajoutPion()
 
             }
@@ -355,6 +362,7 @@ class Board
 
             if (deplacement == true) {
                 this.ajoutPion()
+                this.mouvs++
 
             }
         }
@@ -425,7 +433,7 @@ class Board
 
             if (deplacement == true) {
                 this.ajoutPion()
-
+                this.mouvs++
             }
         }
 
@@ -500,7 +508,7 @@ class Board
 
             if (deplacement == true) {
                 this.ajoutPion()
-
+                this.mouvs++
             }
         }
         
@@ -540,6 +548,7 @@ class Board
         if (typeof(localStorage.getItem('size') == 'string') && localStorage.getItem('size') != null) {
             size = localStorage.getItem('size')
         }
+
         this.init(size)
 
     }
