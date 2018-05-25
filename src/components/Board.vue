@@ -3,11 +3,16 @@
     <div id="jeu">
         <div class="plateau">
             <div v-for="(place, index) in places"
-        :key="index" :nb="nb" :index="index" class="place" v-bind:style="{'width': dimension + 'px', 'height': dimension + 'px'}">
+        :key="index" :nb="nb" :fusionnable="fusionnable" :index="index" class="place" v-bind:style="{'width': dimension + 'px', 'height': dimension + 'px'}">
                 <p class="number" v-bind:nb="place.nb">{{place.nb}}</p>
             </div>
         </div>
     </div>
+    <br />
+    <div id="score">
+        <p>Score : <strong>{{ score }}</strong> | Mouvements : <strong>{{ mouvs }}</strong></p>
+    </div>
+    Taille du plateau : <input id="number" type="number" min="2" max="6" v-bind:value="size">
     <button @click="reset">Recommencer</button>
 
 </div>
@@ -23,19 +28,29 @@ export default {
             // BoardJS.helloworld()
         },
         reset() {
-            BoardJS.reset()
+            BoardJS.reset(document.getElementById('number').value)
+            this.size = BoardJS.size
+            localStorage.setItem('size', BoardJS.size)
+            this.dimension = 500 / BoardJS.size
             this.places = BoardJS.pions
+            this.score = BoardJS.score
+            this.mouvs = BoardJS.mouvs
         }
         
     },
     data () {
         return {
+            "size" : BoardJS.size,
             "dimension" : 500 / BoardJS.size,
-            "places" : BoardJS.pions
+            "places" : BoardJS.pions,
+            "score" : BoardJS.score,
+            "mouvs" : BoardJS.mouvs
         }
     },
     created () {
         console.log('TOAST')
+
+        localStorage.setItem('size', BoardJS.size)
 
         window.addEventListener("keypress", e => {
             console.log('///////' + e.keyCode)
@@ -62,6 +77,10 @@ export default {
 
             if (e.keyCode == 39 || e.keyCode == 37 || e.keyCode == 40 || e.keyCode == 38) {
                 localStorage.setItem('pions', JSON.stringify(BoardJS.pions))
+                this.score = BoardJS.score
+                localStorage.setItem('score', BoardJS.score)
+                this.mouvs = BoardJS.mouvs
+                localStorage.setItem('mouvs', (BoardJS.mouvs))
                 console.log(localStorage)
             }
 
@@ -86,9 +105,28 @@ export default {
         height: 575px;
     }
 
+    #score {
+        border: solid red;
+    }
+
+    p#bonus {
+        position: absolute;
+    }
+
     .place
     {
         display: inline-flex;
+    }
+
+    @keyframes fusion {
+        0% {
+            transform: scale(1.025);
+            -webkit-transform: scale(1.025);
+        }
+        100% {
+            transform: scale(1);
+            -webkit-transform: scale(1);
+        }
     }
 
     .place p.number {
@@ -112,6 +150,7 @@ export default {
     .place p.number[nb="2"] {
         background-color: #eee4da;
         color: #776e65;
+        /*animation: fusion 0.15s ease-in-out 1;*/
     }
 
     .place p.number[nb="4"] {

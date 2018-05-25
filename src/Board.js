@@ -10,6 +10,8 @@ class Board
     {
         this.size = size
         this.pions = []
+        this.score = 0
+        this.mouvs = 0
 
         this.nbPositions = (this.size * this.size)
 
@@ -19,6 +21,8 @@ class Board
 
         if (typeof(localStorage.getItem('pions') == 'string') && localStorage.getItem('pions') != null) {
             this.pions = JSON.parse(localStorage.getItem('pions'))
+            this.score = localStorage.getItem('score')
+            this.mouvs = localStorage.getItem('mouvs')
             
         }
 
@@ -181,7 +185,10 @@ class Board
 
     fusionnerPlaces(x1, y1, x2, y2) {
         this.setPlaceNb(x1, y1, 0)
-        this.setPlaceNb(x2, y2, (this.getPlaceNb(x2, y2) * 2))
+        let newNb = (this.getPlaceNb(x2, y2) * 2)
+        this.setPlaceNb(x2, y2, newNb)
+        this.score = this.score + newNb
+        console.log('score : ' + this.score)
 
     }
 
@@ -209,6 +216,8 @@ class Board
     }
 
     deplacer(sens) {
+
+        this.mouvs++
 
         if (sens == 'h')
         {
@@ -527,13 +536,17 @@ class Board
         return resultat
     }
 
-    constructor () {
-        this.init(4)
+    constructor (size = 4) {
+        if (typeof(localStorage.getItem('size') == 'string') && localStorage.getItem('size') != null) {
+            size = localStorage.getItem('size')
+        }
+        this.init(size)
+
     }
 
-    reset() {
+    reset(newSize = 4) {
         localStorage.clear()
-        this.init(4)
+        this.init(newSize)
     }
     
 }
