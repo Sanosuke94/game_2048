@@ -1,22 +1,48 @@
 <template>
-    <table width="100%">
-      <thead>
-        <tr>
-          <th>Rank</th>
-          <th>Nickname</th>
-          <th>Score</th>
-          <th>Time</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(score, index) in this.scores" :key="index" :index="index" :class="'rank'+(index+1)">
-          <td>{{ index + 1 }}</td>
-          <td align="left">{{ score.nickname }}</td>
-          <td>{{ Math.round(score.score) }}</td>
-          <td align="left">{{ Math.round(score.time) }} sec</td>
-        </tr>
-      </tbody>
-    </table>
+  <div v-if="this.scores">
+    <div>
+      <h2>TOP 5 - Humans</h2>
+      <table width="100%">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th align="left">Nickname</th>
+            <th>Score</th>
+            <th align="right">Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(score, index) in this.scores.filter(element => {return -1 === element.nickname.indexOf('[AI]')})" :key="index" :index="index" :class="'rank'+(index+1)" v-if="index < 5">
+            <td>{{ index + 1 }}</td>
+            <td align="left">{{ score.nickname }}</td>
+            <td>{{ Math.round(score.score) }}</td>
+            <td align="right">{{ Math.round(score.time) }} sec</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <h2>TOP 5 - AI</h2>
+      <table width="100%">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th align="left">Nickname</th>
+            <th>Score</th>
+            <th align="right">Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(score, index) in this.scores.filter(element => {return -1 !== element.nickname.indexOf('[AI]')})" :key="index" :index="index" :class="'rank'+(index+1)" v-if="index < 5">
+            <td>{{ index + 1 }}</td>
+            <td align="left">{{ score.nickname }}</td>
+            <td>{{ Math.round(score.score) }}</td>
+            <td align="right">{{ Math.round(score.time) }} sec</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -57,5 +83,3 @@ export default {
     }
 }
 </script>
-
-

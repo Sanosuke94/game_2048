@@ -1,7 +1,7 @@
 <template >
   <div id="welcome">
-    <input v-model="nickname" placeholder="Nickname"/>
-    <button @click="save" type="button">Ok</button>
+    <input v-model="nickname" placeholder="Nickname (3 chars min)" autofocus>
+    <button @click="save">Ok</button>
     <p v-if="error">{{ error }}</p>
   </div>
 </template>
@@ -13,9 +13,11 @@ export default {
   name: "Nickname",
   methods: {
     save() {
-      store.commit('setNickname', this.nickname)
-      this.$router.push({path: '/play'})
-      this.$router.forward()
+      if (this.nickname.length > 3 && this.nickname.length < 50) {
+        store.commit('setNickname', this.nickname)
+        this.$router.push({path: '/play'})
+        this.$router.forward()
+      }
     }
   },
   data() {

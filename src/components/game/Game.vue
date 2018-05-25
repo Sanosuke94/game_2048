@@ -1,10 +1,13 @@
 <template>
   <div id="game">
+    <div class="split">
     <div id="header-game">
-        <p>Hi <strong>{{nickname}}</strong> ! | Score : <strong>{{ board.points }}</strong></p>
+        <p>Hi <strong>{{nickname}}</strong> ! | Score : <strong>{{ board.points }}</strong> | <button type="button" @click="restart">Restart</button></p>
     </div>
     <div v-if="board.over">
         <p>You lost :(</p>
+        <p>Final score : <strong>{{ board.points }}</strong></p>
+        <p><button @click="save">Send score to leaderboard</button></p>
     </div>
     <div v-else id="board-game">
       <div v-for="rows in board.squares" class="rows">
@@ -13,13 +16,15 @@
         </div>
       </div>
     </div>
-    <p><button type="button" @click="restart">Restart</button></p>
+    </div>
+    <div class="split">
     <leaderboard></leaderboard>
+    </div>
   </div>
 </template>
 
 <script>
-
+import http from '@/utils/http.js'
 import board from '@/utils/board.js'
 import store from '@/utils/store.js'
 import Leaderboard from '@/components/leaderboard/Leaderboard'
@@ -37,25 +42,33 @@ export default {
   },
   methods: {
      onKeyDown: function (event) {
-          if (event.keyCode >= 37 && event.keyCode <= 40) {
-            switch (event.keyCode) {
-              case 37:
-                this.board.move('left')
-                break;
-              case 38:
-                this.board.move('up')
-                break;
-              case 39:
-                this.board.move('right')
-                break;
-              case 40:
-                this.board.move('down')
-                break;
-            }
-            this.$forceUpdate()
-            store.commit('setBoard', this.board)
-          }
+      if (event.keyCode >= 37 && event.keyCode <= 40) {
+        switch (event.keyCode) {
+          case 37:
+            this.board.move('left')
+            break;
+          case 38:
+            this.board.move('up')
+            break;
+          case 39:
+            this.board.move('right')
+            break;
+          case 40:
+            this.board.move('down')
+            break;
+        }
+        this.$forceUpdate()
+        store.commit('setBoard', this.board)
+      }
      },
+     save() {
+        if (board.over && board.points > 0) {
+          http
+            .get(`${store.getters.getNickname}/${board.points}/60`)
+            .then(resp => console.log(resp))
+            .catch(err => console.log(err.request.response))
+        }
+      },
      restart: function() {
        this.board.init(4)
        this.$forceUpdate()
@@ -67,6 +80,10 @@ export default {
     }
   },
   created() {
+      if (store.getters.getNickname === null) {
+        this.$router.push({path: '/'})
+        this.$router.forward()
+      }
       this.board = board
       this.board.init(4)
       store.commit('setBoard', this.board)
@@ -164,5 +181,11 @@ export default {
   color: #fff;
   background-color: #ec2;
   font-size: 35px;
+}
+
+.split {
+  display: block;
+  width: 48%;
+  float: left;
 }
 </style>
