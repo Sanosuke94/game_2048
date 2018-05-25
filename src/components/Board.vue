@@ -25,6 +25,7 @@ export default {
     name: 'Board',
     methods: {
         toast () {
+            // H a.x > b.x ; B a.x < b.x ; G a.x < b.x ; D a.y < b.y
             // BoardJS.helloworld()
         },
         reset() {
