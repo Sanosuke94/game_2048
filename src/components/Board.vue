@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="jeu">
         <div class="plateau">
             <div v-for="(place, index) in places"
         :key="index" :nb="nb" :index="index" class="place" v-bind:style="{'width': dimension + 'px', 'height': dimension + 'px'}">
@@ -58,31 +58,95 @@ export default {
 </script>
 
 <style>
+    #jeu {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
     .plateau
     {
-        border: solid red;
-        width: 500px;
-        height: 500px;
+        padding: 0px;
+        background-color: #bbada0;
+        width: 575px;
+        height: 575px;
     }
 
     .place
     {
-        background-color: goldenrod;
-        display: inline-block;
+        display: inline-flex;
     }
 
     .place p.number {
         font-size: 2em;
-        background-color: yellow;
-        margin: 5px;
-        height: 85%;
-        border-radius: 15px;
+        color: white;
+        background-color: #440000;
+        height: 100%;
+        width: 100%;
+        transform: scale(0.9);
         display: flex;
         justify-content: center;
         align-items: center;
+        cursor: default;
     }
 
     .place p.number[nb="0"] {
+        background-color: rgba(238, 228, 218, 0.35);
         color: transparent;
     }
+
+    .place p.number[nb="2"] {
+        background-color: #eee4da;
+        color: #776e65;
+    }
+
+    .place p.number[nb="4"] {
+        background-color: #ede0c8;
+        color: #776e65;
+    }
+
+    .place p.number[nb="8"] {
+        background-color: #f2b179;
+        color: #776e65;
+    }
+
+    .place p.number[nb="16"] {
+        background-color: #f59563;
+    }
+
+    .place p.number[nb="32"] {
+        background-color: #f67c5f;
+    }
+
+    .place p.number[nb="64"] {
+        background-color: #f65e3b;
+    }
+
+    .place p.number[nb="128"] {
+        background-color: #edcf72;
+        color: #776e65;
+    }
+
+    .place p.number[nb="256"] {
+        background-color: #edcc61;
+        color: #776e65;
+    } 
+
+    .place p.number[nb="512"] {
+        background-color: #edc53f;
+        color: #776e65;
+    } 
+
+    .place p.number[nb="1024"] {
+        background-color: #edc53f;
+        color: #776e65;
+    } 
+
+    .place p.number[nb="2048"] {
+        background-color: #edc22e;
+    } 
+
+     
+
 </style>
