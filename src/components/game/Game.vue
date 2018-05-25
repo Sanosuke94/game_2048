@@ -2,15 +2,15 @@
   <div id="game">
     <div class="split">
     <div id="header-game">
-        <p>Hi <strong>{{nickname}}</strong> ! | Score : <strong>{{ board.points }}</strong> | <button type="button" @click="restart">Restart</button></p>
+        <p>Hi <strong>{{this.nickname}}</strong> ! | Score : <strong>{{ this.board.points }}</strong> | <button type="button" @click="restart">Restart</button></p>
     </div>
-    <div v-if="board.over">
+    <div v-if="this.board.over">
         <p>You lost :(</p>
-        <p>Final score : <strong>{{ board.points }}</strong></p>
+        <p>Final score : <strong>{{ this.board.points }}</strong></p>
         <p><button @click="save">Send score to leaderboard</button></p>
     </div>
     <div v-else id="board-game">
-      <div v-for="rows in board.squares" class="rows">
+      <div v-for="rows in this.board.squares" class="rows">
         <div v-for="cell in rows" :class="'cell tile'+cell">
           {{ cell == 0 ? '' : cell }}
         </div>
@@ -59,18 +59,27 @@ export default {
         }
         this.$forceUpdate()
         store.commit('setBoard', this.board)
+        if (this.board.over) {
+          this.endDate = new Date()
+          this.timer = Math.floor((this.endDate - this.startDate) / 1000) % 60
+        }
       }
      },
      save() {
-        if (board.over && board.points > 0) {
+        if (this.board.over && this.board.points > 0 && this.timer > 0) {
           http
-            .get(`${store.getters.getNickname}/${board.points}/60`)
-            .then(resp => console.log(resp))
+            .get(`${this.nickname}/${this.board.points}/${this.timer}`)
+            .then(resp => {
+              console.log(resp)
+              this.restart()
+            })
             .catch(err => console.log(err.request.response))
         }
       },
      restart: function() {
        this.board.init(4)
+       this.startDate = new Date()
+       this.timer = 0
        this.$forceUpdate()
      }
   },
@@ -80,12 +89,14 @@ export default {
     }
   },
   created() {
-      if (store.getters.getNickname === null) {
+      if (this.nickname === null) {
         this.$router.push({path: '/'})
         this.$router.forward()
       }
       this.board = board
       this.board.init(4)
+      this.startDate = new Date()
+      this.timer = 0
       store.commit('setBoard', this.board)
       window.addEventListener('keydown', this.onKeyDown)
   }
