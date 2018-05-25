@@ -2,7 +2,7 @@
   <div id="app">
     <h1>Jeu du 2048</h1>
     <p><i>Cédric, Matthias, Estève</i></p>
-    <hr />
+    <br />
     <router-view/>
   </div>
 </template>
