@@ -1,17 +1,19 @@
 <template>
-    <table>
+    <table width="100%">
       <thead>
         <tr>
+          <th>Rank</th>
           <th>Nickname</th>
           <th>Score</th>
           <th>Time</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(score, index) in this.scores" :key="index" :index="index">
-          <td>{{ score.nickname.substring(0, 30) }}</td>
-          <td>{{ score.score }}</td>
-          <td>{{ score.time.substring(0, 30) }}</td>
+        <tr v-for="(score, index) in this.scores" :key="index" :index="index" :class="'rank'+(index+1)">
+          <td>{{ index + 1 }}</td>
+          <td align="left">{{ score.nickname }}</td>
+          <td>{{ Math.round(score.score) }}</td>
+          <td align="left">{{ Math.round(score.time) }} sec</td>
         </tr>
       </tbody>
     </table>
@@ -32,17 +34,16 @@ export default {
             if (element.nickname === undefined || element.nickname.length < 3 || element.nickname.length > 50) {
               isValid &= false
             }
-            if (element.score === undefined || isNaN(element.score) || parseInt(element.score) < 1) {
+            if (element.score === undefined || isNaN(element.score) || parseInt(element.score) < 1 || parseInt(element.score) > 999999999) {
               isValid &= false
             }
             if (element.time === undefined || isNaN(element.time) || parseInt(element.time) < 1) {
               isValid &= false
             }
             return isValid
-          })
-          this.scores.forEach((element, index) => {
-            element.score = Number(element.score)
-          })
+          }).sort(function(a, b) {
+            return a.score - b.score;
+          }).reverse()
         })
         .catch(error => this.error = JSON.parse(error.request.response)['error'])
     },
