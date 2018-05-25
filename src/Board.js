@@ -355,7 +355,9 @@ class Board
             this.ajoutPion()
             this.mouvs++
         }
-        
+    
+        this.verifierFusionnables()
+
     }
 
     haut() {
@@ -372,6 +374,59 @@ class Board
 
     droite() {
         this.deplacer('d')
+    }
+
+    comparerLesNombres(x1, y1, x2, y2) {
+        console.log('comparer pour ' + x1 + y1 + x2 + y2)
+
+
+        if (typeof(this.pions[this.getPlaceIndex(x2, y2)]) != 'undefined') {
+            console.log(x1 + ":" + y1 + " (" + this.pions[this.getPlaceIndex(x1, y1)].nb + ") " + x2 + ":" + y2 + " (" + this.pions[this.getPlaceIndex(x2, y2)].nb + ")")
+
+            if (this.pions[this.getPlaceIndex(x2, y2)].nb == this.pions[this.getPlaceIndex(x1, y1)].nb) {
+                return true;
+
+            } else {
+                return false;
+
+            }
+
+        } else {
+            console.log("ça passe pas là")
+            return false;
+
+        }
+    }
+
+    verifierFusionnables() {
+        console.log('VERIF FUSIONNABLES')
+
+        let finit = true;
+
+        let a = ''
+        let b = ''
+        let c = ''
+        let d = ''
+        this.pions.forEach(element => {
+            console.log(element.x + ":" + element.y)
+            console.log( (element.y - 1) + 'SAMER')
+
+            a = (this.comparerLesNombres(element.x, element.y, element.x, (element.y + 1)))
+            b = (this.comparerLesNombres(element.x, element.y, element.x, (element.y - 1)))
+            c = (this.comparerLesNombres(element.x, element.y, (element.x + 1), element.y ))
+            d = (this.comparerLesNombres(element.x, element.y, (element.x - 1), element.y ))
+            
+            if (a == true || b == true || c == true || d == true || element.nb == 0) {
+                finit = false
+            }
+
+        });
+
+        console.log("terminé ?")
+        console.log(finit)
+        if (finit == true) {
+            alert ('GAME OVER !\nVous avez perdu.')
+        }
     }
 
     /**
