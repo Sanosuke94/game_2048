@@ -14,6 +14,7 @@
       </div>
     </div>
     <p><button type="button" @click="restart">Restart</button></p>
+    <leaderboard></leaderboard>
   </div>
 </template>
 
@@ -21,9 +22,11 @@
 
 import board from '@/utils/board.js'
 import store from '@/utils/store.js'
+import Leaderboard from '@/components/leaderboard/Leaderboard'
 
 export default {
   name: 'Game',
+  components: { Leaderboard },
   computed: {
     board() {
       return store.getters.getBoard
@@ -73,10 +76,6 @@ export default {
 </script>
 
 <style>
-#game {
-    text-align: center;
-}
-
 #board-game {
     display: inline-block;
     padding: 2px;
