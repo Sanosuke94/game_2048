@@ -19,23 +19,25 @@ class Board
         this.size = size
         this.pions = []
         this.score = 0
+        this.highscore = 0
         this.mouvs = 0
 
         this.nbPositions = (this.size * this.size)
 
-        console.log('localstorage')
-        console.log(localStorage)
-        console.log(typeof(localStorage.getItem('pions')))
 
         if (typeof(localStorage.getItem('pions') == 'string') && localStorage.getItem('pions') != null) {
             this.pions = JSON.parse(localStorage.getItem('pions'))
             this.score = localStorage.getItem('score')
             this.mouvs = localStorage.getItem('mouvs')
-            
+        
+        }
+
+        if (typeof(localStorage.getItem('highscore')) == 'string') {
+            this.setHighScore(localStorage.getItem('highscore'))
         }
 
         else {
-            console.log('pas de sauvegarde = on part de zero')
+
 
             let i = 1
             let u = 1
@@ -51,13 +53,16 @@ class Board
                 i++
             }
     
-             console.log(this.pions)
-    
             this.ajoutPion()
             this.ajoutPion()
 
         }
 
+    }
+
+    setHighScore(nb) {
+        this.highscore = nb
+        localStorage.setItem('highscore', nb)
     }
 
     /**
@@ -68,7 +73,6 @@ class Board
         let placesLibres = this.getPlacesLibres()
 
         if (placesLibres.length > 0) {
-            console.log("places libres : " + placesLibres.length)
             // choper l'index de la position correspondant à une choisie aléatoirement parmi celles qui sont libres
    
             // console.log('intervale : 0, ' + (placesLibres.length - 1))
@@ -196,7 +200,6 @@ class Board
         let newNb = (this.getPlaceNb(x2, y2) * 2)
         this.setPlaceNb(x2, y2, newNb)
         this.score = parseFloat(parseFloat(this.score) + parseFloat(newNb))
-        console.log('score : ' + this.score)
 
     }
 
@@ -293,7 +296,6 @@ class Board
 
         }
 
-        console.log(sens + " recX: " + recursiveX + "recY" + recursiveY)
 
         let deplacement = false
         // console.log(liste[0].nb);
@@ -392,14 +394,12 @@ class Board
             }
 
         } else {
-            console.log("ça passe pas là")
             return false;
 
         }
     }
 
     verifierFusionnables() {
-        console.log('VERIF FUSIONNABLES')
 
         let finit = true;
 
@@ -408,8 +408,6 @@ class Board
         let c = ''
         let d = ''
         this.pions.forEach(element => {
-            console.log(element.x + ":" + element.y)
-            console.log( (element.y - 1) + 'SAMER')
 
             a = (this.comparerLesNombres(element.x, element.y, element.x, (element.y + 1)))
             b = (this.comparerLesNombres(element.x, element.y, element.x, (element.y - 1)))
@@ -422,10 +420,17 @@ class Board
 
         });
 
-        console.log("terminé ?")
-        console.log(finit)
         if (finit == true) {
-            alert ('GAME OVER !\nVous avez perdu.')
+            this.gameover()
+        }
+    }
+
+    gameover() {
+        alert ('GAME OVER !\nVous avez perdu.')
+        if (this.score > this.highscore) {
+            // alert('Félicitations ! Vous avez battu le meilleur score !')
+            this.setHighScore(this.score)
+
         }
     }
 

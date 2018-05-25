@@ -1,5 +1,6 @@
 <template>
 <div>
+    <!-- <p>Meilleure score : {{ highscore }}</p> -->
     <div id="jeu">
         <div class="plateau" v-bind:style="{'width': (size * 100) + 'px', 'height': (size * 100) + 'px'}">
             <div v-for="(place, index) in places"
@@ -34,6 +35,7 @@ export default {
             localStorage.setItem('size', BoardJS.size)
             this.places = BoardJS.pions
             this.score = BoardJS.score
+            this.highscore = BoardJS.highscore
             this.mouvs = BoardJS.mouvs
         }
         
@@ -44,6 +46,7 @@ export default {
             "dimension" : 100,
             "places" : BoardJS.pions,
             "score" : BoardJS.score,
+            "highscore" : BoardJS.highscore,
             "mouvs" : BoardJS.mouvs
         }
     },
