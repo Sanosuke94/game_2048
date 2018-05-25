@@ -195,7 +195,7 @@ class Board
         this.setPlaceNb(x1, y1, 0)
         let newNb = (this.getPlaceNb(x2, y2) * 2)
         this.setPlaceNb(x2, y2, newNb)
-        this.score = this.score + newNb
+        this.score = parseFloat(parseFloat(this.score) + parseFloat(newNb))
         console.log('score : ' + this.score)
 
     }
@@ -225,10 +225,15 @@ class Board
 
     deplacer(sens) {
 
-        if (sens == 'h')
-        {
+        let recursiveX = 0
+        let recursiveY = 0
+        let liste = null
 
-            let liste = this.getPlacesPrises().sort(function(a,b){
+        if (sens == 'h') {
+            recursiveX = -1
+            recursiveY = 0
+
+            liste = this.getPlacesPrises().sort(function(a,b){
                 if (a.x > b.x) {
                     return 1
                 } else if (a.x < b.x) {
@@ -237,69 +242,14 @@ class Board
                     return 0
                 }
             })
-            let deplacement = false
-            // console.log(liste[0].nb);
 
-            liste.forEach(element => {
-                let libre = true
-                let oldPosX = element.x
-                let oldPosY = element.y
-                let currentPosX = element.x
-                let currentPosY = element.y
-                let newPosX = element.x
-                let newPosY = element.y
-                let currentNb = this.getPlaceNb(element.x, element.y)
-
-                this.setFusionnable(element.x, element.y, true)
-                // Bon alors là ce qu'on va faire c'est qu'on va placer le "pion" le plus à droite possible
-
-                while (libre == true) {
-                    libre = this.getPlaceStatut((currentPosX - 1), currentPosY)
-                    // console.log(currentPosX + ":" + (currentPosY - 1) + " libre ? " + libre)
-                    if (libre == true) {
-                        // console.log('oui')
-
-                        newPosX = newPosX - 1
-                        currentPosX = currentPosX - 1
-
-                    } // console.log(libre)
-
-                }
-                // console.log("sortie du while. position retenue " + newPosX + ":" + newPosY)
-                // et la on change la position
-                this.changerPosition(oldPosX, oldPosY, newPosX, newPosY)
-                // console.log(oldPosX + ":" + oldPosY + " > " + newPosX + ":" + newPosY + " " + this.getPlaceStatut(1, 1) + " " + this.pions[0].nb)
-
-                if (oldPosX != newPosX || oldPosY != newPosY) {
-                    deplacement = true
-                }
-
-                // on vérifie si la case d'après n'aurait pas le même chiffre
-                // console.log(newPosX + ":" + (newPosY + 1) + " est-il fusionnable ?")
-                // console.log(this.getFusionnable(newPosX, (newPosY + 1)))
-                if (
-                    this.getPlaceNb((newPosX - 1), newPosY ) == currentNb && this.getFusionnable((newPosX - 1), newPosY) == true
-                )
-                {
-                    this.fusionnerPlaces(newPosX, newPosY, (newPosX - 1), newPosY )
-                    // console.log("fuuuuuuusion")
-                    this.setFusionnable((newPosX - 1), newPosY, false)
-
-                }
-
-            });
-
-            if (deplacement == true) {
-                this.mouvs++
-                this.ajoutPion()
-
-            }
         }
+        
+        if (sens == 'b') {
+            recursiveX = 1
+            recursiveY = 0
 
-        if (sens == 'b')
-        {
-
-            let liste = this.getPlacesPrises().sort(function(a,b){
+            liste = this.getPlacesPrises().sort(function(a,b){
                 if (a.x < b.x) {
                     return 1
                 } else if (a.x > b.x) {
@@ -308,69 +258,14 @@ class Board
                     return 0
                 }
             })
-            let deplacement = false
-            // console.log(liste[0].nb);
 
-            liste.forEach(element => {
-                let libre = true
-                let oldPosX = element.x
-                let oldPosY = element.y
-                let currentPosX = element.x
-                let currentPosY = element.y
-                let newPosX = element.x
-                let newPosY = element.y
-                let currentNb = this.getPlaceNb(element.x, element.y)
-
-                this.setFusionnable(element.x, element.y, true)
-                // Bon alors là ce qu'on va faire c'est qu'on va placer le "pion" le plus à droite possible
-
-                while (libre == true) {
-                    libre = this.getPlaceStatut((currentPosX + 1), currentPosY)
-                    // console.log(currentPosX + ":" + (currentPosY - 1) + " libre ? " + libre)
-                    if (libre == true) {
-                        // console.log('oui')
-
-                        newPosX = newPosX + 1
-                        currentPosX = currentPosX + 1
-
-                    } // console.log(libre)
-
-                }
-                // console.log("sortie du while. position retenue " + newPosX + ":" + newPosY)
-                // et la on change la position
-                this.changerPosition(oldPosX, oldPosY, newPosX, newPosY)
-                // console.log(oldPosX + ":" + oldPosY + " > " + newPosX + ":" + newPosY + " " + this.getPlaceStatut(1, 1) + " " + this.pions[0].nb)
-
-                if (oldPosX != newPosX || oldPosY != newPosY) {
-                    deplacement = true
-                }
-
-                // on vérifie si la case d'après n'aurait pas le même chiffre
-                // console.log(newPosX + ":" + (newPosY + 1) + " est-il fusionnable ?")
-                // console.log(this.getFusionnable(newPosX, (newPosY + 1)))
-                if (
-                    this.getPlaceNb((newPosX + 1), newPosY ) == currentNb && this.getFusionnable((newPosX + 1), newPosY) == true
-                )
-                {
-                    this.fusionnerPlaces(newPosX, newPosY, (newPosX + 1), newPosY )
-                    // console.log("fuuuuuuusion")
-                    this.setFusionnable((newPosX + 1), newPosY, false)
-
-                }
-
-            });
-
-            if (deplacement == true) {
-                this.ajoutPion()
-                this.mouvs++
-
-            }
         }
+        
+        if (sens == 'g') {
+            recursiveX = 0
+            recursiveY = -1
 
-        if (sens == 'g')
-        {
-
-            let liste = this.getPlacesPrises().sort(function(a,b){
+            liste = this.getPlacesPrises().sort(function(a,b){
                 if (a.x < b.x) {
                     return 1
                 } else if (b.x < a.x) {
@@ -379,68 +274,14 @@ class Board
                     return 0
                 }
             })
-            let deplacement = false
-            // console.log(liste[0].nb);
 
-            liste.forEach(element => {
-                let libre = true
-                let oldPosX = element.x
-                let oldPosY = element.y
-                let currentPosX = element.x
-                let currentPosY = element.y
-                let newPosX = element.x
-                let newPosY = element.y
-                let currentNb = this.getPlaceNb(element.x, element.y)
-
-                this.setFusionnable(element.x, element.y, true)
-                // Bon alors là ce qu'on va faire c'est qu'on va placer le "pion" le plus à droite possible
-
-                while (libre == true) {
-                    libre = this.getPlaceStatut(currentPosX, (currentPosY - 1))
-                    // console.log(currentPosX + ":" + (currentPosY - 1) + " libre ? " + libre)
-                    if (libre == true) {
-                        // console.log('oui')
-
-                        newPosY = newPosY - 1
-                        currentPosY = currentPosY - 1
-
-                    } // console.log(libre)
-
-                }
-                // console.log("sortie du while. position retenue " + newPosX + ":" + newPosY)
-                // et la on change la position
-                this.changerPosition(oldPosX, oldPosY, newPosX, newPosY)
-                // console.log(oldPosX + ":" + oldPosY + " > " + newPosX + ":" + newPosY + " " + this.getPlaceStatut(1, 1) + " " + this.pions[0].nb)
-
-                if (oldPosX != newPosX || oldPosY != newPosY) {
-                    deplacement = true
-                }
-
-                // on vérifie si la case d'après n'aurait pas le même chiffre
-                // console.log(newPosX + ":" + (newPosY + 1) + " est-il fusionnable ?")
-                // console.log(this.getFusionnable(newPosX, (newPosY + 1)))
-                if (
-                    this.getPlaceNb(newPosX, (newPosY - 1)) == currentNb && this.getFusionnable(newPosX, (newPosY - 1)) == true
-                )
-                {
-                    this.fusionnerPlaces(newPosX, newPosY, newPosX, (newPosY - 1))
-                    // console.log("fuuuuuuusion")
-                    this.setFusionnable(newPosX, (newPosY - 1), false)
-
-                }
-
-            });
-
-            if (deplacement == true) {
-                this.ajoutPion()
-                this.mouvs++
-            }
         }
+        
+        if (sens == 'd') {
+            recursiveX = 0
+            recursiveY = 1
 
-        if (sens == 'd')
-        {
-
-            let liste = this.getPlacesPrises().sort(function(a,b){
+            liste = this.getPlacesPrises().sort(function(a,b){
                 if (a.y < b.y) {
                     return 1
                 } else if (a.y > b.y) {
@@ -449,67 +290,70 @@ class Board
                     return 0
                 }
             })
-            // console.log('LISTE')
-            liste.forEach(element => {
-                // console.log(element.x + ":" + element.y)
-            });
 
-            let deplacement = false
-            // console.log(liste[0].nb);
+        }
 
-            liste.forEach(element => {
-                let libre = true
-                let oldPosX = element.x
-                let oldPosY = element.y
-                let currentPosX = element.x
-                let currentPosY = element.y
-                let newPosX = element.x
-                let newPosY = element.y
-                let currentNb = this.getPlaceNb(element.x, element.y)
+        console.log(sens + " recX: " + recursiveX + "recY" + recursiveY)
 
-                this.setFusionnable(element.x, element.y, true)
-                // Bon alors là ce qu'on va faire c'est qu'on va placer le "pion" le plus à droite possible
+        let deplacement = false
+        // console.log(liste[0].nb);
 
-                while (libre == true) {
-                    libre = this.getPlaceStatut(currentPosX, (currentPosY + 1))
-                    // console.log("libre ?")
-                    if (libre == true) {
-                        // console.log('oui')
+        liste.forEach(element => {
+            let libre = true
+            let oldPosX = element.x
+            let oldPosY = element.y
+            let currentPosX = element.x
+            let currentPosY = element.y
+            let newPosX = element.x
+            let newPosY = element.y
+            let currentNb = this.getPlaceNb(element.x, element.y)
 
-                        newPosY++
-                        currentPosY++
+            this.setFusionnable(element.x, element.y, true)
+            // Bon alors là ce qu'on va faire c'est qu'on va placer le "pion" le plus à droite possible
 
-                    } // console.log(libre)
+            while (libre == true) {
+                libre = this.getPlaceStatut(parseFloat(parseFloat(currentPosX) + parseFloat(recursiveX)), parseFloat(parseFloat(currentPosY) + parseFloat(recursiveY)))
+                console.log("X : " + parseFloat(currentPosX) + " + " + parseFloat(recursiveX) + " = " + parseFloat(parseFloat(currentPosX) + parseFloat(recursiveX)) )
+                console.log("Y : " + currentPosY + " + " + recursiveY + " = " + parseFloat(parseFloat(currentPosY) + parseFloat(recursiveY)) )
+                // console.log("libre ?")
+                if (libre == true) {
+                    // console.log('oui')
 
-                }
+                    newPosY = parseFloat(parseFloat(newPosY) + parseFloat(recursiveY))
+                    newPosX = parseFloat(parseFloat(newPosX) + parseFloat(recursiveX))
+                    currentPosY = parseFloat(parseFloat(currentPosY) + parseFloat(recursiveY))
+                    currentPosX = parseFloat(parseFloat(currentPosX) + parseFloat(recursiveX))
 
-                // et la on change la position
-                this.changerPosition(oldPosX, oldPosY, newPosX, newPosY)
-                // console.log("position changée.")
+                } // console.log(libre)
 
-                if (oldPosX != newPosX || oldPosY != newPosY) {
-                    deplacement = true
-                }
-
-                // on vérifie si la case d'après n'aurait pas le même chiffre
-                // console.log(newPosX + ":" + (newPosY + 1) + " est-il fusionnable ?")
-                // console.log(this.getFusionnable(newPosX, (newPosY + 1)))
-                if (
-                    this.getPlaceNb(newPosX, (newPosY + 1)) == currentNb && sens == 'd' && this.getFusionnable(newPosX, (newPosY + 1)) == true
-                )
-                {
-                    this.fusionnerPlaces(newPosX, newPosY, newPosX, (newPosY + 1))
-                    // console.log("fuuuuuuusion")
-                    this.setFusionnable(newPosX, (newPosY + 1), false)
-
-                }
-
-            });
-
-            if (deplacement == true) {
-                this.ajoutPion()
-                this.mouvs++
             }
+
+            // et la on change la position
+            this.changerPosition(oldPosX, oldPosY, newPosX, newPosY)
+            // console.log("position changée.")
+
+            if (oldPosX != newPosX || oldPosY != newPosY) {
+                deplacement = true
+            }
+
+            // on vérifie si la case d'après n'aurait pas le même chiffre
+            // console.log(newPosX + ":" + (newPosY + 1) + " est-il fusionnable ?")
+            // console.log(this.getFusionnable(newPosX, (newPosY + 1)))
+            if (
+                this.getPlaceNb(parseFloat(parseFloat(newPosX) + parseFloat(recursiveX)), parseFloat(parseFloat(newPosY) + parseFloat(recursiveY))) == currentNb && this.getFusionnable(parseFloat(parseFloat(newPosX) + parseFloat(recursiveX)), parseFloat(parseFloat(newPosY) + parseFloat(recursiveY))) == true
+            )
+            {
+                this.fusionnerPlaces(newPosX, newPosY, parseFloat(parseFloat(newPosX) + parseFloat(recursiveX)), parseFloat(parseFloat(newPosY) + parseFloat(recursiveY)))
+                // console.log("fuuuuuuusion")
+                this.setFusionnable(parseFloat(parseFloat(newPosX) + parseFloat(recursiveX)), parseFloat(parseFloat(newPosY) + parseFloat(recursiveY)), false)
+
+            }
+
+        });
+
+        if (deplacement == true) {
+            this.ajoutPion()
+            this.mouvs++
         }
         
     }
