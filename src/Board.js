@@ -13,24 +13,38 @@ class Board
 
         this.nbPositions = (this.size * this.size)
 
-        let i = 1
-        let u = 1
-        while(i <= this.size)
-        {
-            u = 1
-            while (u <= this.size) {
-                this.pions.push({'index' : (i - 1), 'x' : i, 'y' : u, 'nb' : 0, 'fusionnable' : true})
-                u++
+        console.log('localstorage')
+        console.log(localStorage)
+        console.log(typeof(localStorage.getItem('pions')))
 
-            }
+        if (typeof(localStorage.getItem('pions') == 'string') && localStorage.getItem('pions') != null) {
+            this.pions = JSON.parse(localStorage.getItem('pions'))
             
-            i++
         }
 
-        // console.log(this.pions)
+        else {
+            console.log('pas de sauvegarde = on part de zero')
 
-        this.ajoutPion()
-        this.ajoutPion()
+            let i = 1
+            let u = 1
+            while(i <= this.size)
+            {
+                u = 1
+                while (u <= this.size) {
+                    this.pions.push({'index' : (i - 1), 'x' : i, 'y' : u, 'nb' : 0, 'fusionnable' : true})
+                    u++
+    
+                }
+                
+                i++
+            }
+    
+             console.log(this.pions)
+    
+            this.ajoutPion()
+            this.ajoutPion()
+
+        }
 
     }
 
@@ -517,8 +531,9 @@ class Board
         this.init(4)
     }
 
-    helloworld() {
-        // console.log('ok ça marche !')
+    reset() {
+        localStorage.clear()
+        this.init(4)
     }
     
 }

@@ -1,4 +1,5 @@
 <template>
+<div>
     <div id="jeu">
         <div class="plateau">
             <div v-for="(place, index) in places"
@@ -7,16 +8,23 @@
             </div>
         </div>
     </div>
+    <button @click="reset">Recommencer</button>
+
+</div>
 </template>
 
 <script>
 import BoardJS from '@/Board.js'
 
 export default {
-    name: '@/Board.js',
+    name: 'Board',
     methods: {
         toast () {
             // BoardJS.helloworld()
+        },
+        reset() {
+            BoardJS.reset()
+            this.places = BoardJS.pions
         }
         
     },
@@ -28,7 +36,6 @@ export default {
     },
     created () {
         console.log('TOAST')
-        console.log(BoardJS.pions)
 
         window.addEventListener("keypress", e => {
             console.log('///////' + e.keyCode)
@@ -52,7 +59,13 @@ export default {
                 BoardJS.haut()
 
             }
-        })
+
+            if (e.keyCode == 39 || e.keyCode == 37 || e.keyCode == 40 || e.keyCode == 38) {
+                localStorage.setItem('pions', JSON.stringify(BoardJS.pions))
+                console.log(localStorage)
+            }
+
+    })
     }
 }
 </script>
