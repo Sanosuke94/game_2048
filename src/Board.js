@@ -349,7 +349,7 @@ class Board
                 // console.log(newPosX + ":" + (newPosY + 1) + " est-il fusionnable ?")
                 // console.log(this.getFusionnable(newPosX, (newPosY + 1)))
                 if (
-                    this.getPlaceNb((newPosX + 1), newPosY ) == currentNb && this.getFusionnable((newPosX - 1), newPosY) == true
+                    this.getPlaceNb((newPosX + 1), newPosY ) == currentNb && this.getFusionnable((newPosX + 1), newPosY) == true
                 )
                 {
                     this.fusionnerPlaces(newPosX, newPosY, (newPosX + 1), newPosY )
